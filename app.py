@@ -117,7 +117,7 @@ if filtered.empty:
 
 
 # KPI cards
-col1, col2, col3, col4 = st.columns(4)
+col1, col2, col3 = st.columns(3)
 
 with col1:
     st.metric(
@@ -132,12 +132,6 @@ with col2:
     )
 
 with col3:
-    st.metric(
-        "Average Depth",
-        f"{filtered['Depth'].mean():.1f} km"
-    )
-
-with col4:
     major = len(filtered[filtered["Magnitude"] >= 7])
     st.metric(
         "Major Earthquakes · M≥7",
