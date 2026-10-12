@@ -1,10 +1,19 @@
-# 🌎 Earth Pulse — Global Seismic Activity Dashboard
+# 🌎 Team 13 — Earth Pulse: Global Seismic Activity Dashboard
 
 ## Project Overview
 
-Earth Pulse is an interactive Streamlit dashboard designed for international earthquake risk analysts to monitor global seismic activity patterns.
+Earth Pulse is an interactive Streamlit dashboard designed for international earthquake risk analysts to monitor global seismic activity patterns and support earthquake risk assessment decisions.
 
-The dashboard transforms historical earthquake records into meaningful insights through key metrics, geographic visualization, and time-series analysis. Instead of displaying every available data point, this project focuses on the information that supports earthquake risk assessment and monitoring decisions.
+The dashboard transforms historical earthquake records into meaningful insights through key metrics, geographic visualization, time-series analysis, regional comparison, and event exploration.
+
+Instead of displaying every available data point, this project focuses on the information that helps analysts identify important seismic patterns and make informed decisions.
+
+The dashboard provides four analytical perspectives:
+
+- **Global Overview** — High-level monitoring of worldwide seismic activity
+- **Spatiotemporal Explorer** — Exploration of earthquake activity across different time periods
+- **Regional Analysis** — Comparison of earthquake characteristics by magnitude categories
+- **Event Explorer** — Detailed investigation of individual earthquake records
 
 ---
 
@@ -13,6 +22,8 @@ The dashboard transforms historical earthquake records into meaningful insights 
 ## Dataset Name
 
 **Significant Earthquakes, 1965-2016**
+
+---
 
 ## Source
 
@@ -43,19 +54,25 @@ The dataset includes information such as:
 | Depth | Earthquake depth in kilometers |
 | Magnitude | Earthquake magnitude |
 | Type | Type of seismic event |
-| Location | Earthquake location description |
+| Source | Data source information |
 
 ---
 
 ## Dataset Size
 
-The dataset contains:
+The original dataset contains:
 
 **23,412 earthquake records**
 
 and
 
 **21 variables**
+
+After removing records with missing geographic or measurement values required for visualization, the dashboard uses:
+
+**23,409 valid earthquake records**
+
+for analysis.
 
 The CSV file size is under 25 MB, making it suitable for GitHub storage and Streamlit Cloud deployment.
 
@@ -81,7 +98,7 @@ The dashboard is designed for earthquake risk analysts who monitor global seismi
 
 Analysts review this dashboard:
 
-- Weekly for general monitoring
+- Weekly for general seismic monitoring
 - Immediately after major earthquake events
 
 ---
@@ -92,7 +109,7 @@ Analysts review this dashboard:
 
 Without this dashboard, analysts need to manually explore large earthquake datasets and create separate reports to identify geographic patterns, magnitude changes, and high-risk regions.
 
-This process requires additional time and makes it harder to quickly identify important seismic events.
+This process requires additional time and makes it difficult to quickly identify important seismic events.
 
 ---
 
@@ -113,6 +130,7 @@ A dashboard is more appropriate because earthquake analysts repeatedly need to:
 - Explore different time periods
 - Compare earthquake magnitude levels
 - Identify geographic patterns
+- Investigate specific earthquake events
 
 Interactive visualization allows users to quickly understand earthquake activity without repeatedly creating manual reports.
 
@@ -120,13 +138,13 @@ Interactive visualization allows users to quickly understand earthquake activity
 
 # 4. Dashboard Design Decisions
 
-## Key Metrics
+## Key Performance Indicators (KPIs)
 
-We selected three headline metrics that users can understand within seconds.
+We selected four headline metrics that users can understand within seconds.
 
 ---
 
-## 1. Total Earthquakes
+## 1. Total Events
 
 ### Purpose
 
@@ -134,7 +152,7 @@ Shows the total number of earthquake events based on the selected filters.
 
 ### Why It Matters
 
-Provides a quick overview of seismic activity volume.
+Provides a quick overview of seismic activity volume and helps analysts understand the scale of current observations.
 
 ---
 
@@ -146,11 +164,23 @@ Displays the strongest earthquake magnitude within the selected dataset.
 
 ### Why It Matters
 
-Extreme magnitude events are more likely to require additional investigation.
+Extreme magnitude events are more likely to require additional investigation and risk assessment.
 
 ---
 
-## 3. Major Earthquakes (Magnitude ≥ 7)
+## 3. Average Depth
+
+### Purpose
+
+Shows the average earthquake depth of selected events.
+
+### Why It Matters
+
+Depth provides additional context about earthquake characteristics and helps analysts understand differences between seismic events.
+
+---
+
+## 4. Major Earthquakes (Magnitude ≥7)
 
 ### Purpose
 
@@ -164,7 +194,7 @@ Large earthquakes are more likely to create significant impacts and require atte
 
 # Supporting Visualizations
 
-## 1. Global Earthquake Distribution Map
+## 1. Global Earthquake Risk Map
 
 The map displays earthquake locations around the world.
 
@@ -180,13 +210,38 @@ Helps analysts identify regions with frequent or severe earthquake activity.
 
 ---
 
-## 2. Earthquake Activity Trend Over Time
+## 2. Seismic Events by Year
 
-This chart shows how earthquake activity changes from 1965 to 2016.
+This time-series chart shows how earthquake activity changes from 1965 to 2016.
 
 ### Decision Supported
 
-Allows analysts to observe historical patterns and compare activity across different years.
+Allows analysts to observe historical activity patterns and compare earthquake frequency across different years.
+
+---
+
+## 3. Regional Analysis
+
+This view groups earthquakes by magnitude categories:
+
+- 5.5-6.0
+- 6.0-7.0
+- 7.0-8.0
+- 8.0+
+
+### Decision Supported
+
+Helps analysts compare earthquake severity distribution.
+
+---
+
+## 4. Event Explorer
+
+This view provides detailed earthquake records for users who need additional investigation.
+
+### Decision Supported
+
+Allows analysts to examine specific earthquake events after identifying important patterns.
 
 ---
 
@@ -194,25 +249,31 @@ Allows analysts to observe historical patterns and compare activity across diffe
 
 The dashboard includes only filters that support decision-making.
 
-## Year Range
+---
+
+## Date Range
 
 Allows users to analyze earthquake activity during different time periods.
 
+---
+
 ## Magnitude Range
 
-Allows users to focus on stronger earthquakes and reduce unnecessary information.
+Allows users to focus on earthquakes with specific severity levels and reduce unnecessary information.
 
 ---
 
 # 5. What We Chose Not to Show
 
-## 1. Individual Earthquake Records Table
+## 1. Complete Raw Dataset Table
 
 ### Reason
 
 The dataset contains thousands of earthquake events.
 
-Displaying all individual records would make the dashboard harder to interpret and would not support high-level risk decisions.
+Displaying all records at once would make the dashboard harder to interpret and would not support high-level risk decisions.
+
+Only the Event Explorer view provides detailed records when users need deeper investigation.
 
 ---
 
@@ -220,9 +281,9 @@ Displaying all individual records would make the dashboard harder to interpret a
 
 ### Reason
 
-Some variables describe measurement uncertainty and technical scientific details.
+Some variables describe technical measurement uncertainty.
 
-Although these fields may be useful for researchers, they do not directly support earthquake risk monitoring decisions.
+Although these fields may be useful for scientific research, they do not directly support earthquake risk monitoring decisions.
 
 ---
 
@@ -246,11 +307,13 @@ Therefore, users should not interpret this dashboard as a complete record of all
 
 ---
 
-## Missing Values
+## Missing Values and Data Cleaning
 
 Some scientific measurement fields contain missing values.
 
-These fields are not used in the main dashboard analysis, so missing values do not affect the primary insights.
+Records missing essential geographic or measurement information were removed before visualization.
+
+The dashboard therefore represents cleaned earthquake records rather than the complete raw dataset.
 
 ---
 
@@ -325,3 +388,15 @@ Streamlit Cloud
 ---
 
 # 10. Project Structure
+
+```
+earth-pulse-dashboard/
+
+├── app.py
+├── EDA.ipynb
+├── README.md
+├── requirements.txt
+│
+└── data/
+    └── database.csv
+```
