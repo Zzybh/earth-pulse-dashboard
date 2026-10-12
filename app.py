@@ -191,7 +191,7 @@ with col3:
 # -------------------------
 
 st.subheader(
-    "Global Earthquake Distribution"
+    "Global Earthquake Risk Map"
 )
 
 
