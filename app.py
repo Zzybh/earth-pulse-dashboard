@@ -8,16 +8,34 @@ st.set_page_config(
 )
 
 
+
 @st.cache_data
 def load_data():
+    # Load the original Kaggle dataset
     df = pd.read_csv("data/database.csv")
 
-    df["Date"] = pd.to_datetime(df["Date"], errors="coerce")
+    # Keep only natural earthquake events
+    df = df[df["Type"] == "Earthquake"].copy()
+
+    # Convert mixed date formats to datetime
+    df["Date"] = pd.to_datetime(
+        df["Date"],
+        format="mixed",
+        errors="coerce",
+        utc=True
+    )
+
+    # Extract the year
     df["Year"] = df["Date"].dt.year
 
+    # Convert important columns to numeric values
     for col in ["Latitude", "Longitude", "Depth", "Magnitude"]:
-        df[col] = pd.to_numeric(df[col], errors="coerce")
+        df[col] = pd.to_numeric(
+            df[col],
+            errors="coerce"
+        )
 
+    # Remove rows missing essential information
     df = df.dropna(
         subset=[
             "Latitude",
@@ -28,6 +46,7 @@ def load_data():
         ]
     )
 
+    # Create magnitude categories
     df["Magnitude Category"] = pd.cut(
         df["Magnitude"],
         bins=[5.5, 6, 7, 8, 10],
@@ -45,6 +64,14 @@ def load_data():
 
 df = load_data()
 
+# Temporary data cleaning check
+print("Total earthquake records:", len(df))
+print("Event types:", df["Type"].unique())
+print("Date range:", df["Year"].min(), "-", df["Year"].max())
+print("Minimum magnitude:", df["Magnitude"].min())
+print("Maximum magnitude:", df["Magnitude"].max())
+print("Major earthquakes (M>=7):", (df["Magnitude"] >= 7).sum())
+print("Missing dates:", df["Date"].isna().sum())
 
 # Header
 st.title("🌎 Team 13 — Earth Pulse")
